@@ -3,6 +3,8 @@
 
 using namespace std;
 
+// queue 선언 시 대문자가 아닌 소문자..
+
 int main()
 {
     ios::sync_with_stdio(false);
@@ -14,8 +16,9 @@ int main()
         int n;
         
         cin >> n;
-
-        if(n== -1)break;
+        
+        if(n == -1)break;
+        
         queue<int> que;
 
         int sum = 1;
