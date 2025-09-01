@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// 최대, 최소 pair 리턴
+pair<int, int> calc(vector<int> &a, int index, int cur, int plus, int minus, int mul, int div)
+{
+    int n = a.size();
+    if(index == n)
+    {
+        return make_pair(cur, cur);
+    }
+
+    vector<pair<int, int>> res;
+
+    if(plus > 0)
+    {
+        res.push_back(calc(a, index+1, cur+a[index], plus-1, minus, mul, div));
+    }
+    if(minus > 0)
+    {
+        res.push_back(calc(a, index+1, cur-a[index], plus, minus-1, mul, div));
+    }
+    if(mul > 0)
+    {
+        res.push_back(calc(a, index+1, cur*a[index], plus, minus, mul-1, div));
+    }
+    if(div > 0)
+    {
+        res.push_back(calc(a, index+1, cur/a[index], plus, minus, mul, div-1));
+    }
+
+    auto ans = res[0];
+
+    for(auto p : res)
+    {
+        if(ans.first < p.first)
+        {
+            ans.first = p.first;
+        }
+
+        if(ans.second > p.second)
+        {
+            ans.second = p.second;
+        }
+    }
+
+    return ans;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+
+    for(int i=0; i<n; i++)
+    {
+        cin >> a[i];
+    }
+
+    int plus, minus, mul, div;
+
+    cin >> plus >> minus >> mul >> div;
+
+    // index가 1로 시작하는 이유: 재귀의 시작이 "a[0] [연산자] a[1]"꼴이 돼야 하기 때문이다.
+    auto p = calc(a, 1, a[0], plus, minus, mul, div);
+
+    cout << p.first << '\n';
+    cout << p.second << '\n';
+
+    return 0;
+}
